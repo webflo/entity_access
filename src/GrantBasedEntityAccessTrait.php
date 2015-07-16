@@ -39,9 +39,9 @@ trait GrantBasedEntityAccessTrait {
   /**
    * {@inheritdoc}
    */
-  public function writeGrants(ContentEntityInterface $node, $delete = TRUE) {
-    $grants = $this->acquireGrants($node);
-    $this->grantStorage()->write($node, $grants, NULL, $delete);
+  public function writeGrants(ContentEntityInterface $entity, $delete = TRUE) {
+    $grants = $this->acquireGrants($entity);
+    $this->grantStorage()->write($entity, $grants, NULL, $delete);
   }
 
   /**

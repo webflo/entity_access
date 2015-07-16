@@ -34,6 +34,8 @@ function entity_access_grants($op, AccountInterface $account) {
 
 /**
  * Implements hook_entity_insert().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
  */
 function entity_access_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
   /**
@@ -44,6 +46,8 @@ function entity_access_entity_insert(Drupal\Core\Entity\EntityInterface $entity)
 
 /**
  * Implements hook_entity_update().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
  */
 function entity_access_entity_update(Drupal\Core\Entity\EntityInterface $entity) {
   /**
@@ -54,6 +58,8 @@ function entity_access_entity_update(Drupal\Core\Entity\EntityInterface $entity)
 
 /**
  * Implements hook_entity_delete().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
  */
 function entity_access_entity_delete(Drupal\Core\Entity\EntityInterface $entity) {
   /**

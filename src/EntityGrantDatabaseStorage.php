@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\entity\NodeGrantDatabaseStorage.
+ * Contains \Drupal\entity_access\EntityGrantDatabaseStorage.
  */
 
-namespace Drupal\entity;
+namespace Drupal\entity_access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Connection;
@@ -15,7 +15,6 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\entity_access\EntityGrantDatabaseStorageInterface;
 
 /**
  * Defines a controller class that handles the entity grants system.

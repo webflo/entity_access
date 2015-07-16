@@ -1,6 +1,0 @@
-name: 'Entity access test module'
-type: module
-description: 'Support module for entity permission testing.'
-package: Testing
-version: VERSION
-core: 8.x

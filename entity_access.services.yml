@@ -1,0 +1,4 @@
+services:
+  entity_access.grant_storage:
+    class: Drupal\entity_access\EntityGrantDatabaseStorage
+    arguments: ['@database', '@module_handler', '@language_manager']

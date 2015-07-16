@@ -1,0 +1,6 @@
+name: entity_access
+type: module
+description: My Awesome Module
+core: 8.x
+package: Other
+

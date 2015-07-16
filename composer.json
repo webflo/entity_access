@@ -1,0 +1,14 @@
+{
+  "name": "drupal/entity_access",
+  "type": "module",
+  "description": "My Awesome Module",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "http://drupal.org/project/entity_access",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "http://drupal.org/project/entity_access",
+    "source": "http://cgit.drupalcode.org/entity_access"
+  },
+  "require": { }
+}

@@ -69,14 +69,7 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
     // If no module implements the hook or the entity does not have an id there is
     // no point in querying the database for access grants.
     if (!$this->moduleHandler->getImplementations('entity_grants') || !$entity->id()) {
-      // Return the equivalent of the default grant, defined by
-      // self::writeDefault().
-      if ($operation === 'view') {
-        return AccessResult::allowedIf($entity->getTranslation($langcode)->isPublished())->cacheUntilEntityChanges($entity);
-      }
-      else {
-        return AccessResult::neutral();
-      }
+      return AccessResult::neutral();
     }
 
     // Check the database for potential access grants.
@@ -113,12 +106,18 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
     // theoretically cacheable, because we don't have the necessary metadata to
     // know it for a fact.
     $set_cacheability = function (AccessResult $access_result) use ($operation) {
-      $access_result->addCacheContexts(['user.entity_grants:' . $operation]);
+      // $access_result->addCacheContexts(['user.entity_grants:' . $operation]);
       if ($operation !== 'view') {
         $access_result->setCacheMaxAge(0);
       }
       return $access_result;
     };
+
+    /*
+    debug($langcode);
+    debug($entity_ids);
+    debug((string) $query);
+    */
 
     if ($query->execute()->fetchField()) {
       return $set_cacheability(AccessResult::allowed());

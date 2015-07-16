@@ -82,21 +82,22 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
     // Check the database for potential access grants.
     $query = $this->database->select('entity_access');
     $query->addExpression('1');
+    $query->condition('entity_type', $entity->getEntityTypeId());
     // Only interested for granting in the current operation.
     $query->condition('grant_' . $operation, 1, '>=');
     // Check for grants for this entity and the correct langcode.
-    $nids = $query->andConditionGroup()
+    $entity_ids = $query->andConditionGroup()
       ->condition('entity_id', $entity->id())
       ->condition('langcode', $langcode);
     // If the entity is published, also take the default grant into account. The
     // default is saved with a entity ID of 0.
     $status = $entity->isPublished();
     if ($status) {
-      $nids = $query->orConditionGroup()
-        ->condition($nids)
+      $entity_ids = $query->orConditionGroup()
+        ->condition($entity_ids)
         ->condition('entity_id', 0);
     }
-    $query->condition($nids);
+    $query->condition($entity_ids);
     $query->range(0, 1);
 
     $grants = static::buildGrantsQueryCondition(entity_access_grants($operation, $account));

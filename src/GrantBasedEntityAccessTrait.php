@@ -8,11 +8,6 @@ use Drupal\Core\Session\AccountInterface;
 trait GrantBasedEntityAccessTrait {
 
   /**
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface;
-   */
-  protected $moduleHandler;
-
-  /**
    * @var \Drupal\entity_access\EntityGrantDatabaseStorageInterface
    */
   protected $grantStorage;
@@ -21,9 +16,9 @@ trait GrantBasedEntityAccessTrait {
    * {@inheritdoc}
    */
   public function acquireGrants(ContentEntityInterface $entity) {
-    $grants = $this->moduleHandler()->invokeAll('entity_access_records', array($entity));
+    $grants = $this->moduleHandler->invokeAll('entity_access_records', array($entity));
     // Let modules alter the grants.
-    $this->moduleHandler()->alter('entity_access_records', $grants, $entity);
+    $this->moduleHandler->alter('entity_access_records', $grants, $entity);
     if (empty($grants)) {
       $grants[] = array(
         'realm' => 'all',
@@ -70,16 +65,6 @@ trait GrantBasedEntityAccessTrait {
    */
   public function checkAllGrants(AccountInterface $account) {
     return $this->grantStorage()->checkAll($account);
-  }
-
-  /**
-   * @return \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected function moduleHandler() {
-    if (!isset($this->moduleHandler)) {
-      $this->moduleHandler = \Drupal::service('module_handler');
-    }
-    return $this->moduleHandler;
   }
 
   protected function grantStorage() {

@@ -202,7 +202,7 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
    */
   public function write(ContentEntityInterface $entity, array $grants, $realm = NULL, $delete = TRUE) {
     if ($delete) {
-      $query = $this->database->delete('entity_access')->condition('entity_id', $entity->id());
+      $query = $this->database->delete('entity_access')->condition('entity_type', $entity->getEntityTypeId())->condition('entity_id', $entity->id());
       if ($realm) {
         $query->condition('realm', array($realm, 'all'), 'IN');
       }
@@ -210,7 +210,7 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
     }
     // Only perform work when entity_access modules are active.
     if (!empty($grants) && count($this->moduleHandler->getImplementations('entity_grants'))) {
-      $query = $this->database->insert('entity_access')->fields(array('entity_id', 'langcode', 'fallback', 'realm', 'gid', 'grant_view', 'grant_update', 'grant_delete'));
+      $query = $this->database->insert('entity_access')->fields(array('entity_type', 'entity_id', 'langcode', 'fallback', 'realm', 'gid', 'grant_view', 'grant_update', 'grant_delete'));
       // If we have defined a granted langcode, use it. But if not, add a grant
       // for every language this entity is translated to.
       foreach ($grants as $grant) {
@@ -226,6 +226,7 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
         foreach ($grant_languages as $grant_langcode => $grant_language) {
           // Only write grants; denies are implicit.
           if ($grant['grant_view'] || $grant['grant_update'] || $grant['grant_delete']) {
+            $grant['entity_type'] = $entity->getEntityTypeId();
             $grant['entity_id'] = $entity->id();
             $grant['langcode'] = $grant_langcode;
             // The record with the original langcode is used as the fallback.

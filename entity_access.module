@@ -1,33 +1,63 @@
 <?php
 
-/**
- * @file
- * Contains entity_access.module.
- */
-
-use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\entity_access\EntityAccessHelper;
 
 /**
- * Implements hook_help().
+ * Fetches an array of permission IDs granted to the given user ID.
+ *
+ * The implementation here provides only the universal "all" grant. A entity
+ * access module should implement hook_entity_grants() to provide a grant list for
+ * the user.
+ *
+ * After the default grants have been loaded, we allow modules to alter the
+ * grants array by reference. This hook allows for complex business logic to be
+ * applied when integrating multiple entity access modules.
+ *
+ * @param string $op
+ *   The operation that the user is trying to perform.
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   The account object for the user performing the operation.
+ *
+ * @return array
+ *   An associative array in which the keys are realms, and the values are
+ *   arrays of grants for those realms.
  */
-function entity_access_help($route_name, RouteMatchInterface $route_match) {
-  switch ($route_name) {
-    // Main module help for the entity_access module.
-    case 'help.page.entity_access':
-      $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('My Awesome Module') . '</p>';
-      return $output;
+function entity_access_grants($op, AccountInterface $account) {
+  // Fetch entity access grants from other modules.
+  $grants = \Drupal::moduleHandler()->invokeAll('entity_grants', array($account, $op));
+  // Allow modules to alter the assigned grants.
+  \Drupal::moduleHandler()->alter('entity_grants', $grants, $account, $op);
 
-    default:
-  }
+  return array_merge(array('all' => array(0)), $grants);
 }
 
 /**
- * Implements hook_theme().
+ * Implements hook_entity_insert().
  */
-function entity_access_theme() {
-  $theme = [];
+function entity_access_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
+  /**
+   * @todo: Service?
+   */
+  EntityAccessHelper::update($entity);
+}
 
-  return $theme;
+/**
+ * Implements hook_entity_update().
+ */
+function entity_access_entity_update(Drupal\Core\Entity\EntityInterface $entity) {
+  /**
+   * @todo: Service?
+   */
+  EntityAccessHelper::update($entity);
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function entity_access_entity_delete(Drupal\Core\Entity\EntityInterface $entity) {
+  /**
+   * @todo: Service?
+   */
+  EntityAccessHelper::delete($entity);
 }

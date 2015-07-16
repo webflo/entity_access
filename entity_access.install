@@ -1,0 +1,88 @@
+<?php
+
+
+/**
+ * Implements hook_schema().
+ */
+function entity_access_schema() {
+  $schema['entity_access'] = array(
+    'description' => 'Identifies which realm/grant pairs a user must possess in order to view, update, or delete specific entities.',
+    'fields' => array(
+      'entity_type' => array(
+        'description' => 'The entity_type this record affects.',
+        'type' => 'varchar_ascii',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'entity_id' => array(
+        'description' => 'The {entity}.entity_id this record affects.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'langcode' => array(
+        'description' => 'The {language}.langcode of this entity.',
+        'type' => 'varchar_ascii',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'fallback' => array(
+        'description' => 'Boolean indicating whether this record should be used as a fallback if a language condition is not provided.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'gid' => array(
+        'description' => "The grant ID a user must possess in the specified realm to gain this row's privileges on the entity.",
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'realm' => array(
+        'description' => 'The realm in which the user must possess the grant ID. Each entity access entity can define one or more realms.',
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'grant_view' => array(
+        'description' => 'Boolean indicating whether a user with the realm/grant pair can view this entity.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ),
+      'grant_update' => array(
+        'description' => 'Boolean indicating whether a user with the realm/grant pair can edit this entity.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ),
+      'grant_delete' => array(
+        'description' => 'Boolean indicating whether a user with the realm/grant pair can delete this entity.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ),
+    ),
+    'primary key' => array('entity_id', 'gid', 'realm', 'langcode'),
+    'foreign keys' => array(
+      'affected_entity' => array(
+        'table' => 'entity',
+        'columns' => array('entity_id' => 'entity_id'),
+      ),
+    ),
+  );
+
+  return $schema;
+}

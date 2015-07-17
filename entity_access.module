@@ -24,6 +24,11 @@ use Drupal\entity_access\EntityAccessHelper;
  *   arrays of grants for those realms.
  */
 function entity_access_grants($op, AccountInterface $account) {
+  /**
+   * @todo: Distinguish between different entity types? Could be useful to use
+   * the same grant for multiple entity types.
+   */
+
   // Fetch entity access grants from other modules.
   $grants = \Drupal::moduleHandler()->invokeAll('entity_grants', array($account, $op));
   // Allow modules to alter the assigned grants.

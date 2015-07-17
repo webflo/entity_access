@@ -11,16 +11,16 @@ function entity_access_schema() {
       'entity_type' => array(
         'description' => 'The entity_type this record affects.',
         'type' => 'varchar_ascii',
-        'length' => 12,
+        'length' => 32,
         'not null' => TRUE,
         'default' => '',
       ),
       'entity_id' => array(
         'description' => 'The {entity}.entity_id this record affects.',
-        'type' => 'int',
-        'unsigned' => TRUE,
+        'type' => 'varchar_ascii',
+        'length' => 128,
         'not null' => TRUE,
-        'default' => 0,
+        'default' => '',
       ),
       'langcode' => array(
         'description' => 'The {language}.langcode of this entity.',

@@ -241,6 +241,7 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
       }
       $query->execute();
     }
+    $this->moduleHandler->invokeAll('entity_access_grant_write', ['entity' => $entity, 'grants' => $grants, 'realm' => $realm]);
   }
 
   /**

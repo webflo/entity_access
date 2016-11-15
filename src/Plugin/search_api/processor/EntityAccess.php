@@ -97,13 +97,6 @@ class EntityAccess extends ProcessorPluginBase {
     $properties = [];
 
     if (!$datasource) {
-      $properties['search_api_entity_type'] = new ProcessorProperty([
-        'label' => $this->t('Entity type information'),
-        'description' => $this->t('Data needed to apply entity access.'),
-        'type' => 'string',
-        'processor_id' => $this->getPluginId(),
-      ]);
-
       $properties['search_api_entity_grants'] = new ProcessorProperty([
         'label' => $this->t('Entity access information'),
         'description' => $this->t('Data needed to apply entity access.'),
@@ -126,13 +119,8 @@ class EntityAccess extends ProcessorPluginBase {
       $anonymous_user = new AnonymousUserSession();
     }
 
-    $fields = $this->getFieldsHelper()
-      ->filterForPropertyPath($item->getFields(), NULL, 'search_api_entity_type');
-    foreach ($fields as $field) {
-      $field->addValue($item->getDatasource()->getEntityTypeId());
-    }
-
     if (!$this->entityTypeHasGrants($item->getDatasource()->getEntityTypeId())) {
+      // Datasource (entity type) does not support grants.
       return;
     }
 

@@ -84,11 +84,14 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
       ->condition('langcode', $langcode);
     // If the entity is published, also take the default grant into account. The
     // default is saved with a entity ID of 0.
-    $status = $entity->isPublished();
-    if ($status) {
-      $entity_ids = $query->orConditionGroup()
-        ->condition($entity_ids)
-        ->condition('entity_id', 0);
+    if (method_exists($entity, 'isPublished')) {
+      $status = $entity->isPublished();
+      if ($status) {
+        $entity_ids = $query->orConditionGroup()
+          ->condition($entity_ids)
+          ->condition('entity_id', 0);
+      }
+      $query->condition($entity_ids);
     }
     $query->condition($entity_ids);
     $query->range(0, 1);

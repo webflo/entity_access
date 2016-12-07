@@ -66,6 +66,9 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
    * {@inheritdoc}
    */
   public function access(ContentEntityInterface $entity, $operation, $langcode, AccountInterface $account) {
+    if (!in_array($operation, array('view', 'update', 'delete'))) {
+      return AccessResult::neutral();
+    }
     // If no module implements the hook or the entity does not have an id there is
     // no point in querying the database for access grants.
     if (!$this->moduleHandler->getImplementations('entity_grants') || !$entity->id()) {
@@ -152,6 +155,9 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
    * {@inheritdoc}
    */
   public function alterQuery($query, array $tables, $op, AccountInterface $account, $base_table) {
+    if (!in_array($op, array('view', 'update', 'delete'))) {
+      return AccessResult::neutral();
+    }
     if (!$langcode = $query->getMetaData('langcode')) {
       $langcode = FALSE;
     }

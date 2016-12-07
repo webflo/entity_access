@@ -286,9 +286,10 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
   /**
    * {@inheritdoc}
    */
-  public function deleteNodeRecords(array $entity_ids) {
+  public function deleteEntityRecords(ContentEntityInterface $entity) {
     $this->database->delete('entity_access')
-      ->condition('entity_id', $entity_ids, 'IN')
+      ->condition('entity_type', $entity->getEntityTypeId())
+      ->condition('entity_id', $entity->id())
       ->execute();
   }
 

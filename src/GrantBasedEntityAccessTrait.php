@@ -63,6 +63,13 @@ trait GrantBasedEntityAccessTrait {
   /**
    * {@inheritdoc}
    */
+  public function deleteEntityRecords(ContentEntityInterface $entity) {
+    $this->grantStorage()->deleteEntityRecords($entity);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function checkAllGrants(AccountInterface $account) {
     return $this->grantStorage()->checkAll($account);
   }

@@ -38,7 +38,7 @@ class EntityAccessHelper {
    */
   public static function delete(EntityInterface $entity) {
     if (static::hasGrantAwareAccessController($entity->getEntityType())) {
-      \Drupal::entityManager()->getAccessControlHandler($entity->getEntityTypeId())->deleteGrants($entity);
+      \Drupal::entityManager()->getAccessControlHandler($entity->getEntityTypeId())->deleteEntityRecords($entity);
     }
   }
 

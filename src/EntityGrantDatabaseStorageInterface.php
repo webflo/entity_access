@@ -8,6 +8,7 @@
 namespace Drupal\entity_access;
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -127,12 +128,11 @@ interface EntityGrantDatabaseStorageInterface {
   public function count();
 
   /**
-   * Remove the access records belonging to certain entities.
+   * Remove the access records belonging to certain entity.
    *
-   * @param array $entity_ids
-   *   A list of entity IDs. The grant records belonging to these entities will be
-   *   deleted.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The grant records belonging to these entities will be deleted.
    */
-  public function deleteNodeRecords(array $entity_ids);
+  public function deleteEntityRecords(ContentEntityInterface $entity);
 
 }

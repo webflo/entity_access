@@ -75,7 +75,7 @@ function entity_access_schema() {
         'size' => 'tiny',
       ),
     ),
-    'primary key' => array('entity_id', 'gid', 'realm', 'langcode'),
+    'primary key' => array('entity_type', 'entity_id', 'gid', 'realm', 'langcode'),
     'foreign keys' => array(
       'affected_entity' => array(
         'table' => 'entity',

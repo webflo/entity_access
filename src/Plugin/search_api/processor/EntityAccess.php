@@ -102,6 +102,7 @@ class EntityAccess extends ProcessorPluginBase {
         'description' => $this->t('Data needed to apply entity access.'),
         'type' => 'string',
         'processor_id' => $this->getPluginId(),
+        'is_list' => TRUE
       ]);
     }
 

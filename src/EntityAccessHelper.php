@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\entity\EntityAccessHelper.
- */
-
 namespace Drupal\entity_access;
 
 use Drupal\Core\Entity\EntityInterface;
@@ -27,7 +22,7 @@ class EntityAccessHelper {
    */
   public static function update(EntityInterface $entity) {
     if (static::hasGrantAwareAccessController($entity->getEntityType())) {
-      \Drupal::entityManager()->getAccessControlHandler($entity->getEntityTypeId())->writeGrants($entity);
+      \Drupal::entityTypeManager()->getAccessControlHandler($entity->getEntityTypeId())->writeGrants($entity);
     }
   }
 
@@ -38,7 +33,7 @@ class EntityAccessHelper {
    */
   public static function delete(EntityInterface $entity) {
     if (static::hasGrantAwareAccessController($entity->getEntityType())) {
-      \Drupal::entityManager()->getAccessControlHandler($entity->getEntityTypeId())->deleteEntityRecords($entity);
+      \Drupal::entityTypeManager()->getAccessControlHandler($entity->getEntityTypeId())->deleteEntityRecords($entity);
     }
   }
 

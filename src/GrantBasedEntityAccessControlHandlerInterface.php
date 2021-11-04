@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\entity\GrantBasedEntityAccessControlHandlerInterface.
- */
 
 namespace Drupal\entity_access;
 

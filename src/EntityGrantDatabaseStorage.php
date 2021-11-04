@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\entity_access\EntityGrantDatabaseStorage.
- */
-
 namespace Drupal\entity_access;
 
 use Drupal\Core\Access\AccessResult;

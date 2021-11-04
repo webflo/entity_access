@@ -1,0 +1,6 @@
+services:
+  entity_access.commands:
+    arguments: ['@entity_type.manager']
+    class: \Drupal\entity_access\Commands\EntityAccessCommands
+    tags:
+      - { name: drush.command }

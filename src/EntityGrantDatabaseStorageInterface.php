@@ -1,14 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\entity\EntityGrantDatabaseStorageInterface.
- */
-
 namespace Drupal\entity_access;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**

@@ -1,14 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\entity_access\Plugin\search_api\processor\EntityAccess.
- */
-
 namespace Drupal\entity_access\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
@@ -139,7 +133,7 @@ class EntityAccess extends ProcessorPluginBase {
       if (!$entity->access('view', $anonymous_user)) {
         // If anonymous user has no permission we collect all grants with their
         // realms in the item.
-        $result = db_query('SELECT * FROM {entity_access} WHERE entity_type = :entity_type AND (entity_id = 0 OR entity_id = :entity_id) AND grant_view = 1', array(':entity_type' => $entity->getEntityTypeId(), ':entity_id' => $entity->id()));
+        $result = \Drupal::database()->query('SELECT * FROM {entity_access} WHERE entity_type = :entity_type AND (entity_id = 0 OR entity_id = :entity_id) AND grant_view = 1', array(':entity_type' => $entity->getEntityTypeId(), ':entity_id' => $entity->id()));
         foreach ($result as $grant) {
           $field->addValue("entity_access_{$grant->realm}:{$grant->gid}");
         }

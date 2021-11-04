@@ -1,12 +1,8 @@
 <?php
 
-/**
- * @file
- * Definition of Drupal\entity_access\Plugin\views\filter\Access.
- */
-
 namespace Drupal\entity_access\Plugin\views\filter;
 
+use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 
@@ -36,10 +32,11 @@ class Access extends FilterPluginBase {
     $account = $this->view->getUser();
     if (!$account->hasPermission('bypass entity access')) {
       $table = $this->ensureMyTable();
-      $grants = db_or();
+      $or_group = new Condition('OR');
       foreach (entity_access_grants('view', $account) as $realm => $gids) {
         foreach ($gids as $gid) {
-          $grants->condition(db_and()
+          $and_group = new Condition('AND');
+          $or_group->condition($and_group()
             ->condition($table . '.gid', $gid)
             ->condition($table . '.realm', $realm)
           );

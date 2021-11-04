@@ -9,7 +9,7 @@ function entity_access_views_data_alter(array &$data) {
   /**
    * @var EntityTypeInterface[] $entity_types
    */
-  $entity_types = array_filter(\Drupal::entityManager()->getDefinitions(), function (EntityTypeInterface $type) {
+  $entity_types = array_filter(\Drupal::entityTypeManager()->getDefinitions(), function (EntityTypeInterface $type) {
     return is_subclass_of($type->getAccessControlClass(), '\Drupal\entity_access\GrantBasedEntityAccessControlHandlerInterface');
   });
 

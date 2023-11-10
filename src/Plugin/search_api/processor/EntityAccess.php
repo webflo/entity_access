@@ -7,7 +7,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\TypedData\ComplexDataInterface;
-use Drupal\entity_access\EntityAccessHelper;
+use Drupal\entity_access\GrantBasedEntityAccessControlHandlerInterface;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
@@ -77,7 +77,7 @@ class EntityAccess extends ProcessorPluginBase {
   public static function supportsIndex(IndexInterface $index) {
     foreach ($index->getDatasources() as $datasource) {
       $entity_type_id = $datasource->getEntityTypeId();
-      if ($entity_type_id && EntityAccessHelper::hasGrantAwareAccessController(\Drupal::entityTypeManager()->getDefinition($entity_type_id))) {
+      if ($entity_type_id && static::entityTypeUsesGrants($entity_type_id)) {
         return TRUE;
       }
     }
@@ -114,7 +114,7 @@ class EntityAccess extends ProcessorPluginBase {
       $anonymous_user = new AnonymousUserSession();
     }
 
-    if (!$this->entityTypeHasGrants($item->getDatasource()->getEntityTypeId())) {
+    if (!static::entityTypeUsesGrants($item->getDatasource()->getEntityTypeId())) {
       // Datasource (entity type) does not support grants.
       return;
     }
@@ -154,7 +154,7 @@ class EntityAccess extends ProcessorPluginBase {
    * @param \Drupal\Core\TypedData\ComplexDataInterface $item
    *   A search object that is being indexed.
    *
-   * @return \Drupal\Core\Entity\ContentEntityInterface
+   * @return \Drupal\Core\Entity\ContentEntityInterface|null
    *   The node related to that search object.
    */
   protected function getEntity(ComplexDataInterface $item) {
@@ -213,7 +213,7 @@ class EntityAccess extends ProcessorPluginBase {
     $unaffected_datasources = array();
     foreach ($this->index->getDatasources() as $datasource_id => $datasource) {
       $entity_type = $datasource->getEntityTypeId();
-      if (static::entityTypeHasGrants($entity_type)) {
+      if (static::entityTypeUsesGrants($entity_type)) {
         $affected_datasources[$entity_type][] = $datasource_id;
       }
       else {
@@ -263,15 +263,9 @@ class EntityAccess extends ProcessorPluginBase {
     $access_conditions->addConditionGroup($grants_conditions);
   }
 
-  protected function entityTypeHasGrants($entity_type) {
-    static $cache;
-
-    if (!isset($cache[$entity_type])) {
-      $type = \Drupal::entityTypeManager()->getDefinition($entity_type);
-      $cache[$entity_type] = EntityAccessHelper::hasGrantAwareAccessController($type);
-    }
-
-    return $cache[$entity_type];
+  protected static function entityTypeUsesGrants($entity_type_id) {
+    $access_handler = \Drupal::entityTypeManager()->getAccessControlHandler($entity_type_id);
+    return $access_handler instanceof GrantBasedEntityAccessControlHandlerInterface;
   }
 
 }

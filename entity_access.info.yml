@@ -1,5 +1,4 @@
-core_version_requirement: ^8 || ^9
-description: My Awesome Module
-name: entity_access
+core_version_requirement: ^9 || ^10
+name: 'Entity access'
 package: Other
 type: module

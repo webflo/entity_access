@@ -2,6 +2,7 @@
 
 namespace Drupal\entity_access;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 
@@ -10,8 +11,8 @@ use Drupal\Core\Entity\EntityTypeInterface;
  * updates.
  *
  * @see entity_access_entity_insert
- * @sse entity_access_entity_update
- * @sse entity_access_entity_delete
+ * @see entity_access_entity_update
+ * @see entity_access_entity_delete
  */
 class EntityAccessHelper {
 
@@ -21,8 +22,10 @@ class EntityAccessHelper {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    */
   public static function update(EntityInterface $entity) {
-    if (static::hasGrantAwareAccessController($entity->getEntityType())) {
-      \Drupal::entityTypeManager()->getAccessControlHandler($entity->getEntityTypeId())->writeGrants($entity);
+    $access_handler = \Drupal::entityTypeManager()->getAccessControlHandler($entity->getEntityTypeId());
+
+    if ($access_handler instanceof GrantBasedEntityAccessControlHandlerInterface && $entity instanceof ContentEntityInterface) {
+      $access_handler->writeGrants($entity);
     }
   }
 
@@ -32,20 +35,11 @@ class EntityAccessHelper {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    */
   public static function delete(EntityInterface $entity) {
-    if (static::hasGrantAwareAccessController($entity->getEntityType())) {
-      \Drupal::entityTypeManager()->getAccessControlHandler($entity->getEntityTypeId())->deleteEntityRecords($entity);
-    }
-  }
+    $access_handler = \Drupal::entityTypeManager()->getAccessControlHandler($entity->getEntityTypeId());
 
-  /**
-   * Checks if the entity access control handler supports grants.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *
-   * @return bool
-   */
-  public static function hasGrantAwareAccessController(EntityTypeInterface $entity_type) {
-    return is_subclass_of($entity_type->getAccessControlClass(), '\Drupal\entity_access\GrantBasedEntityAccessControlHandlerInterface');
+    if ($access_handler instanceof GrantBasedEntityAccessControlHandlerInterface && $entity instanceof ContentEntityInterface) {
+      $access_handler->deleteEntityRecords($entity);
+    }
   }
 
 }

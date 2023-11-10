@@ -36,15 +36,13 @@ class Access extends FilterPluginBase {
       foreach (entity_access_grants('view', $account) as $realm => $gids) {
         foreach ($gids as $gid) {
           $and_group = new Condition('AND');
-          $or_group->condition($and_group()
+          $or_group->condition($and_group
             ->condition($table . '.gid', $gid)
             ->condition($table . '.realm', $realm)
+            ->condition($table . '.grant_view', 1, '>=')
           );
         }
       }
-
-      $this->query->addWhere('AND', $grants);
-      $this->query->addWhere('AND', $table . '.grant_view', 1, '>=');
     }
   }
 

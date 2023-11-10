@@ -79,4 +79,14 @@ interface GrantBasedEntityAccessControlHandlerInterface {
    */
   public function checkAllGrants(AccountInterface $account);
 
+  /**
+   * Delete all grants for a given entity.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The $entity that should have its grants deleted.
+   *
+   * @return void
+   */
+  public function deleteEntityRecords(ContentEntityInterface $entity);
+
 }

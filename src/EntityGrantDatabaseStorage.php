@@ -66,7 +66,7 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
     }
     // If no module implements the hook or the entity does not have an id there is
     // no point in querying the database for access grants.
-    if (!$this->moduleHandler->getImplementations('entity_grants') || !$entity->id()) {
+    if (!$this->moduleHandler->hasImplementations('entity_grants') || !$entity->id()) {
       return AccessResult::neutral();
     }
 
@@ -150,9 +150,6 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
    * {@inheritdoc}
    */
   public function alterQuery($query, array $tables, $op, AccountInterface $account, $base_table) {
-    if (!in_array($op, array('view', 'update', 'delete'))) {
-      return AccessResult::neutral();
-    }
     if (!$langcode = $query->getMetaData('langcode')) {
       $langcode = FALSE;
     }
@@ -212,7 +209,7 @@ class EntityGrantDatabaseStorage implements EntityGrantDatabaseStorageInterface 
       $query->execute();
     }
     // Only perform work when entity_access modules are active.
-    if (!empty($grants) && count($this->moduleHandler->getImplementations('entity_grants'))) {
+    if (!empty($grants) && $this->moduleHandler->hasImplementations('entity_grants')) {
       $query = $this->database->insert('entity_access')->fields(array('entity_type', 'entity_id', 'langcode', 'fallback', 'realm', 'gid', 'grant_view', 'grant_update', 'grant_delete'));
       // If we have defined a granted langcode, use it. But if not, add a grant
       // for every language this entity is translated to.

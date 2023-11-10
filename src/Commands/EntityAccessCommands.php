@@ -52,6 +52,7 @@ class EntityAccessCommands extends DrushCommands {
       }
 
       $query = $storage->getQuery()
+        ->accessCheck(FALSE)
         ->sort($id_key, 'DESC')
         ->range(0, $limit);
 

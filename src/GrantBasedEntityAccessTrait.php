@@ -8,7 +8,7 @@ use Drupal\Core\Session\AccountInterface;
 trait GrantBasedEntityAccessTrait {
 
   /**
-   * @var \Drupal\entity_access\EntityGrantDatabaseStorageInterface
+   * @var \Drupal\entity_access\EntityGrantDatabaseStorageInterface|null
    */
   protected $grantStorage;
 
